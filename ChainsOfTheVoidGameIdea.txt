@@ -1,0 +1,76 @@
+2Dish geometry space RTS
+
+Set up bases, upgrade and reasearch new weapons and armor
+Customize ships
+Resources spawns in clusters and randomly in the world
+
+use quads to make shapes
+Customize ships and save and prefab (Also save connection points)
+Use Sphere Colliders as snap tools
+Weapons can be set to attack(Closest unless specified) or projectile defense (Can be also set individually or as a group)
+Shields and regular hull armor takes different damage depending on the projectile
+Build limits are based on tech point
+Ships can benifit from left, right, and forward turn
+Camera Limits: -5 - -30
+
+Notes:
+Camera: -18
+0.01 turret offset
+For Thrusters use a diagonal to determine which thurst benifits which turn / for left turn \ for right turn
+For Thrusters any thruster facing close to forward direction benifits forward movement
+
+Prodedure:
+Make Hull X
+Make Turrets
+Make Projectile
+Make Turret AI
+Make Enemy AI
+Make Ship Builder
+Make Ships
+Make Buildings
+
+
+Hull:
+Square X
+Half Square X
+Triangle X
+Right Triangle X
+Long Triangle X
+Long Right Triangle X
+Trapazoid X
+Octogon X
+7 sided polygon X
+
+Weapons:
+Hull Damager---------
+Rail Gun 		(Hull) (Slow Rotation) X
+Plasma Gatling Gun 	(Hull) (Medium Rotation)
+Plasma Gun 		(Hull) (Fast Rotation)
+Mega Plasma Curve Gun 	(Hull) (Slow Rotation) 		-Slow like missile-
+Nuke 			(Hull) (Slow Rotation) 		-Slow, big explosion-
+Burst Missile 		(Hull) (Medium Rotation)
+Light Missile 		(Hull) (Fast Rotation) 		-Fast but weak-
+Armor Buster Missile 	(Hull) (Slow Rotation) 		-Slow but strong-
+Plasma Fighters 	(Hull) (No Rotation)
+Missile Fighters 	(Hull) (No Rotation)
+
+Shield Damager---------
+EMP Cluster Missile 	(Shield) (Medium Rotation) 	-Shoots 3 missiles-
+Light Laser 		(Shield) (Fast Rotation)
+Heavy Laser 		(Shield) (Slow Rotation)
+EMP Nuke 		(Shield) (Slow Rotation)
+Laser Fighters 		(Shield) (No Rotation)
+
+Shields:
+Small
+Medium
+Large
+Capital
+
+Buildings:
+Command Center 		(Workers)
+Resource Center		(Cargo Ship)
+Ship Factory 		(Cargo Ship, Small Ship, Medium Ship, Large Ship, Stealth Ship, Capital Ship)
+Research Base 		(Weapon Schematic, Shield Schematic, Stealth Tech, Ship Size Tech, Tech Capacity, Power Plant Size)
+Power Plant
+Defense Turret
