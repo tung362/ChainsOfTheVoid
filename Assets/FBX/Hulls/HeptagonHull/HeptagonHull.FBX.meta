@@ -6,11 +6,22 @@ ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
+    100002: HeptagonBase
+    100004: HeptagonOutline
     400000: //RootNode
+    400002: HeptagonBase
+    400004: HeptagonOutline
     2300000: //RootNode
+    2300002: HeptagonBase
+    2300004: HeptagonOutline
     3300000: //RootNode
+    3300002: HeptagonBase
+    3300004: HeptagonOutline
     4300000: Line001
     4300002: Heptagon
+    4300004: HeptagonOutline
+    4300006: HeptagonBase
+    7400000: Take 001
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -36,7 +47,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 20
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1

@@ -3,12 +3,13 @@
 	Properties
 	{
 		_Texture("Texture", 2D) = "white" {}
-	_InnerRange("Inner Range", float) = 0.0
+		_InnerRange("Inner Range", float) = 0.0
 		_OuterIntensity("Outer Intensity", float) = 0.0
 		_Multiply("Multiply", float) = 2.0
 		_AdditiveColor("Additive Color", Color) = (1,1,1,1)
 		_SurfaceColor("Surface Color", Color) = (1,1,1,1)
 		_Transparency("Transparency", Range(-1,1)) = 0.5
+		_SwitchMode("SwitchMode", float) = 0
 
 		/*_ColorA("Color A", Color) = (1, 1, 1, 1)
 		_ColorB("Color B", Color) = (0, 0, 0, 1)
@@ -40,6 +41,7 @@
 		fixed4 _AdditiveColor;
 		fixed4 _SurfaceColor;
 		half _Transparency;
+		float _SwitchMode;
 		
 		/*fixed4 _ColorA, _ColorB;
 		float _Slide;*/
@@ -75,6 +77,7 @@
 			o.Albedo += scalar * _AdditiveColor * texColor;
 			o.Albedo *= _Multiply;
 			o.Alpha = texColor.a + _Transparency;
+			if(_SwitchMode == 1.0) o.Alpha = (texColor.a * scalar.a) * _Transparency;
 		}
 	ENDCG
 	}

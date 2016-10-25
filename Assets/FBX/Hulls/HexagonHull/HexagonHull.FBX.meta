@@ -1,29 +1,25 @@
 fileFormatVersion: 2
-guid: dc092edd570547d43a7a770c692334ad
-timeCreated: 1475544835
+guid: 1a8f936b581e85942898a7b46137ad3c
+timeCreated: 1476244154
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    100002: SquareBase
-    100004: SquareOutline
-    400000: //RootNode
-    400002: SquareBase
-    400004: SquareOutline
-    2300000: //RootNode
-    2300002: SquareBase
-    2300004: SquareOutline
-    3300000: //RootNode
-    3300002: SquareBase
-    3300004: SquareOutline
-    4300000: Plane001
-    4300002: Square
-    4300004: SquareOutline
-    4300006: SquareBase
+    100000: HexagonBase
+    100002: //RootNode
+    100004: HexagonOutline
+    400000: HexagonBase
+    400002: //RootNode
+    400004: HexagonOutline
+    2300000: HexagonBase
+    2300002: HexagonOutline
+    3300000: HexagonBase
+    3300002: HexagonOutline
+    4300000: HexagonOutline
+    4300002: HexagonBase
     9500000: //RootNode
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
   animations:

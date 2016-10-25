@@ -18,6 +18,17 @@ Camera: -18
 0.01 turret offset
 For Thrusters use a diagonal to determine which thurst benifits which turn / for left turn \ for right turn
 For Thrusters any thruster facing close to forward direction benifits forward movement
+Use Sphere Colliders for Alignment
+
+Modeling notes:
+Scale of 1 unit
+Pivot:
+x:90
+y:0
+z:0
+side calculation:
+180 - 128.57(Angle) = 51.43
+51.43 * 2(side number)
 
 Prodedure:
 Make Hull X
@@ -43,12 +54,12 @@ Octogon X
 
 Weapons:
 Hull Damager---------
-Rail Gun 		(Hull) (Slow Rotation) X
-Plasma Gatling Gun 	(Hull) (Medium Rotation)
-Plasma Gun 		(Hull) (Fast Rotation)
-Mega Plasma Curve Gun 	(Hull) (Slow Rotation) 		-Slow like missile-
-Nuke 			(Hull) (Slow Rotation) 		-Slow, big explosion-
-Burst Missile 		(Hull) (Medium Rotation)
+Rail Gun 		(Hull) (Slow Rotation) X				Octogon 	Octogon
+Plasma Gatling Gun 	(Hull) (Medium Rotation)				Trapizoid 	Square
+Plasma Gun 		(Hull) (Fast Rotation)					Square 		square
+Mega Plasma Curve Gun 	(Hull) (Slow Rotation) 		-Slow like missile-	Hexagon 	square
+Nuke 			(Hull) (Slow Rotation) 		-Slow, big explosion-	Rectangle|N	Triangle
+Burst Missile 		(Hull) (Medium Rotation)				
 Light Missile 		(Hull) (Fast Rotation) 		-Fast but weak-
 Armor Buster Missile 	(Hull) (Slow Rotation) 		-Slow but strong-
 Plasma Fighters 	(Hull) (No Rotation)
@@ -56,8 +67,8 @@ Missile Fighters 	(Hull) (No Rotation)
 
 Shield Damager---------
 EMP Cluster Missile 	(Shield) (Medium Rotation) 	-Shoots 3 missiles-
-Light Laser 		(Shield) (Fast Rotation)
-Heavy Laser 		(Shield) (Slow Rotation)
+Light Laser 		(Shield) (Fast Rotation)				Triangle 	Triangle
+Heavy Laser 		(Shield) (Slow Rotation)				Hexagon 	Triangle
 EMP Nuke 		(Shield) (Slow Rotation)
 Laser Fighters 		(Shield) (No Rotation)
 
