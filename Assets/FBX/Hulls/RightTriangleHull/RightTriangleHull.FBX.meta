@@ -1,26 +1,15 @@
 fileFormatVersion: 2
 guid: 3b4ce696c71ac594bad4ac7ed8b65064
-timeCreated: 1475558588
+timeCreated: 1478913256
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: RightTriangleBase
-    100004: RightTriangleOutline
     400000: //RootNode
-    400002: RightTriangleBase
-    400004: RightTriangleOutline
     2300000: //RootNode
-    2300002: RightTriangleBase
-    2300004: RightTriangleOutline
     3300000: //RootNode
-    3300002: RightTriangleBase
-    3300004: RightTriangleOutline
-    4300000: Plane001
-    4300002: RightTriangle
-    4300004: RightTriangleOutline
-    4300006: RightTriangleBase
+    4300000: RightTriangle
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -46,7 +35,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 20
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1

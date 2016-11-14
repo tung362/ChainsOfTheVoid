@@ -23,8 +23,8 @@ Use Sphere Colliders for Alignment
 Modeling notes:
 Scale of 1 unit
 Pivot:
-x:90
-y:0
+x:0
+y:-180
 z:0
 side calculation:
 180 - 128.57(Angle) = 51.43
@@ -46,37 +46,36 @@ Square X
 Half Square X
 Triangle X
 Right Triangle X
-Long Triangle X
-Long Right Triangle X
-Trapazoid X
-Octogon X
-7 sided polygon X
 
 Weapons:
 Hull Damager---------
-Rail Gun 		(Hull) (Slow Rotation) X				Octogon 	Octogon
-Plasma Gatling Gun 	(Hull) (Medium Rotation)				Trapizoid 	Square
-Plasma Gun 		(Hull) (Fast Rotation)					Square 		square
-Mega Plasma Curve Gun 	(Hull) (Slow Rotation) 		-Slow like missile-	Hexagon 	square
-Nuke 			(Hull) (Slow Rotation) 		-Slow, big explosion-	Rectangle|N	Triangle
-Burst Missile 		(Hull) (Medium Rotation)				
-Light Missile 		(Hull) (Fast Rotation) 		-Fast but weak-
-Armor Buster Missile 	(Hull) (Slow Rotation) 		-Slow but strong-
-Plasma Fighters 	(Hull) (No Rotation)
-Missile Fighters 	(Hull) (No Rotation)
+Rail Gun 		(Hull) (Slow Rotation) XX				
+Plasma Gatling Gun 	(Hull) (Medium Rotation) XX			
+Plasma Gun 		(Hull) (Fast Rotation) XX					
+Mega Plasma Curve Gun 	(Hull) (Slow Rotation) XX	-Slow like missile-	
+Nuke 			(Hull) (Slow Rotation) XX 	-Slow, big explosion-	
+Burst Blaster 		(Hull) (Medium Rotation) XX				
+Light Missile 		(Hull) (Fast Rotation) XX 	-Fast but weak-
+Armor Buster Missile 	(Hull) (Slow Rotation) XX	-Slow but strong-
+Plasma Fighters 	(Hull) (No Rotation) 
+Missile Fighters 	(Hull) (No Rotation) 
 
 Shield Damager---------
-EMP Cluster Missile 	(Shield) (Medium Rotation) 	-Shoots 3 missiles-
-Light Laser 		(Shield) (Fast Rotation)				Triangle 	Triangle
-Heavy Laser 		(Shield) (Slow Rotation)				Hexagon 	Triangle
-EMP Nuke 		(Shield) (Slow Rotation)
-Laser Fighters 		(Shield) (No Rotation)
+EMP Cluster Missile 	(Shield) (Medium Rotation) XX 	-Shoots 3 missiles-
+Light Laser 		(Shield) (Fast Rotation) XX				
+Heavy Laser 		(Shield) (Slow Rotation) XX				
+EMP Nuke 		(Shield) (Slow Rotation) XX
+Laser Fighters 		(Shield) (No Rotation) 
 
 Shields:
 Small
 Medium
 Large
 Capital
+
+Super weapon:
+Planet Splitter
+
 
 Buildings:
 Command Center 		(Workers)

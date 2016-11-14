@@ -1,26 +1,16 @@
 fileFormatVersion: 2
 guid: 637e5a02bffea1c43b7b2c2200fb57ab
-timeCreated: 1475549958
+timeCreated: 1478910810
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: HalfSquareBase
-    100004: HalfSquareOutline
     400000: //RootNode
-    400002: HalfSquareBase
-    400004: HalfSquareOutline
     2300000: //RootNode
-    2300002: HalfSquareBase
-    2300004: HalfSquareOutline
     3300000: //RootNode
-    3300002: HalfSquareBase
-    3300004: HalfSquareOutline
-    4300000: Plane001
+    4300000: default
     4300002: HalfSquare
-    4300004: HalfSquareOutline
-    4300006: HalfSquareBase
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -46,7 +36,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 20
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1
