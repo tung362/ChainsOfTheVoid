@@ -21,8 +21,6 @@ Last edited: Tung Nguyen
 
 public class GlobalVars : MonoBehaviour
 {
-
-
     //Misc
     public bool Pause = false;
     public bool Save = false;
