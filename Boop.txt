@@ -1,5 +1,5 @@
 Todo:
 Schematic (I dont even know... 5 hours - 2 days)
-Fix Weapon placement (about 20 mins)
-Make UI (3 hours)
-Make IsBuilding variable and make stuff invisible if false (10 mins)
+
+make new level
+merge teammate projects

@@ -6,9 +6,17 @@ public class Selection : MonoBehaviour
 {
     /*Settings*/
     public float SnapDistance = 2;
+    public float RotationSpeed = 200;
 
     [HideInInspector]
     public GameObject SelectedObject;
+
+    private LevelTracker Tracker;
+
+    void Start()
+    {
+        Tracker = FindObjectOfType<LevelTracker>();
+    }
 
     void Update()
     {
@@ -17,22 +25,25 @@ public class Selection : MonoBehaviour
 
     void UpdateInput()
     {
-        //Start
-        if (Input.GetMouseButtonDown(0))
+        if(Tracker.BuilderMode == true)
         {
-            Select();
-        }
+            //Start
+            if (Input.GetMouseButtonDown(0))
+            {
+                Select();
+            }
 
-        //Held
-        if (Input.GetMouseButton(0))
-        {
-            StableizeSelectedObject();
-        }
+            //Held
+            if (Input.GetMouseButton(0))
+            {
+                StableizeSelectedObject();
+            }
 
-        //Reset
-        if (Input.GetMouseButtonUp(0))
-        {
-            ResetSelection();
+            //Reset
+            if (Input.GetMouseButtonUp(0))
+            {
+                ResetSelection();
+            }
         }
     }
 
@@ -61,8 +72,8 @@ public class Selection : MonoBehaviour
             if(SelectedObject.transform.GetComponent<Rigidbody>() != null) SelectedObject.transform.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
             SelectedObject.transform.GetComponent<BlockInteraction>().AssignJoints(SnapDistance);
 
-            if (Input.GetKey(KeyCode.Q)) SelectedObject.transform.Rotate(new Vector3(0, 0, 1));
-            if (Input.GetKey(KeyCode.E)) SelectedObject.transform.Rotate(new Vector3(0, 0, -1));
+            if (Input.GetKey(KeyCode.Q)) SelectedObject.transform.Rotate(new Vector3(0, 0, 1) * RotationSpeed * Time.deltaTime);
+            if (Input.GetKey(KeyCode.E)) SelectedObject.transform.Rotate(new Vector3(0, 0, -1) * RotationSpeed * Time.deltaTime);
         }
     }
 

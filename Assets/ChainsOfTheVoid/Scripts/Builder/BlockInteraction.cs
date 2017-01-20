@@ -8,7 +8,7 @@ public class BlockInteraction : MonoBehaviour
     public List<GameObject> ChildJoints = new List<GameObject>();
     public List<GameObject> ConnectedJoints = new List<GameObject>();
     public GameObject WeaponJoint;
-    public GameObject ConnectedJoint;
+    public GameObject ConnectedWeaponJoint;
     public bool IsCommandBlock = false;
     public bool IsInteracting = false;
     //1 = hull, 2 = weapon
@@ -37,6 +37,15 @@ public class BlockInteraction : MonoBehaviour
                 if (ChildJoints[i].GetComponent<Joint>().IsUsed == true) ChildJoints[i].GetComponent<Joint>().IsUsed = false;
             }
         }
+
+        if (ConnectedWeaponJoint != null)
+        {
+            if (WeaponJoint.GetComponent<Joint>().IsUsed == false) WeaponJoint.GetComponent<Joint>().IsUsed = true;
+        }
+        else
+        {
+            if (WeaponJoint.GetComponent<Joint>().IsUsed == true) WeaponJoint.GetComponent<Joint>().IsUsed = false;
+        }
     }
 
     public void Interaction()
@@ -63,6 +72,7 @@ public class BlockInteraction : MonoBehaviour
         if (IsCommandBlock) return;
         IsAttached = false;
         for (int i = 0; i < ConnectedJoints.Count; ++i) ConnectedJoints[i] = null;
+        ConnectedWeaponJoint = null;
         foreach(Transform child in transform.root)
         {
             if(child.GetComponent<BlockInteraction>() != null) child.GetComponent<BlockInteraction>().RemoteRemoveConnectedJoint(gameObject);
@@ -70,11 +80,6 @@ public class BlockInteraction : MonoBehaviour
         transform.root.GetComponent<BlockInteraction>().RemoteRemoveConnectedJoint(gameObject);
         transform.parent = null;
         transform.GetComponent<Rigidbody>().isKinematic = false;
-        //gameObject.AddComponent<Rigidbody>();
-        //theRigidbody.mass = 2;
-        //theRigidbody.drag = 1;
-        //theRigidbody.angularDrag = 4;
-        //theRigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
     }
 
     public void AssignJoints(float SnapDistance)
@@ -249,6 +254,16 @@ public class BlockInteraction : MonoBehaviour
             float Offset = Vector3.Distance(ClosestJoint.transform.position, transform.position);
             Vector3 BlockJointDirection = (new Vector3(ClosestBlockJoint.transform.position.x, ClosestBlockJoint.transform.position.y, 0) - new Vector3(ClosestBlockJoint.transform.parent.position.x, ClosestBlockJoint.transform.parent.position.y, 0)).normalized;
             transform.position = new Vector3(ClosestBlockJoint.transform.position.x + (BlockJointDirection.x * Offset), ClosestBlockJoint.transform.position.y + (BlockJointDirection.y * Offset), ClosestBlockJoint.transform.position.z);
+
+            for (int i = 0; i < ChildJoints.Count; ++i)
+            {
+                if (ChildJoints[i] == ClosestJoint)
+                {
+                    ConnectedJoints[i] = ClosestBlockJoint;
+                    ClosestBlockJoint.transform.parent.GetComponent<BlockInteraction>().RemoteAddConnectedJoint(ClosestJoint, ClosestBlockJoint, 1);
+                    break;
+                }
+            }
         }
         else if (SnapType == 2)
         {
@@ -257,19 +272,16 @@ public class BlockInteraction : MonoBehaviour
 
             //Rotation
             transform.eulerAngles = new Vector3(0, 0, 0);
+
+            if (WeaponJoint == ClosestJoint)
+            {
+                ConnectedWeaponJoint = ClosestBlockJoint;
+                ClosestBlockJoint.transform.parent.GetComponent<BlockInteraction>().RemoteAddConnectedJoint(ClosestJoint, ClosestBlockJoint, 2);
+            }
         }
 
         transform.parent = ClosestBlockJoint.transform.root;
         IsAttached = true;
-        for (int i = 0; i < ChildJoints.Count; ++i)
-        {
-            if(ChildJoints[i] == ClosestJoint)
-            {
-                ConnectedJoints[i] = ClosestBlockJoint;
-                ClosestBlockJoint.transform.root.GetComponent<BlockInteraction>().RemoteAddConnectedJoint(ClosestJoint, ClosestBlockJoint);
-                break;
-            }
-        }
     }
 
     public void ResetColor()
@@ -288,15 +300,22 @@ public class BlockInteraction : MonoBehaviour
     }
 
     //Call Whenever connecting with another joint (ensures sync)
-    public void RemoteAddConnectedJoint(GameObject newConnectedJoint, GameObject Joint)
+    public void RemoteAddConnectedJoint(GameObject newConnectedJoint, GameObject Joint, int AddType)
     {
-        for (int i = 0; i < ChildJoints.Count; ++i)
+        if(AddType == 1)
         {
-            if (ChildJoints[i] == Joint)
+            for (int i = 0; i < ChildJoints.Count; ++i)
             {
-                ConnectedJoints[i] = newConnectedJoint;
-                break;
+                if (ChildJoints[i] == Joint)
+                {
+                    ConnectedJoints[i] = newConnectedJoint;
+                    break;
+                }
             }
+        }
+        else if(AddType == 2)
+        {
+            if (WeaponJoint == Joint) ConnectedWeaponJoint = newConnectedJoint;
         }
     }
 
@@ -312,6 +331,10 @@ public class BlockInteraction : MonoBehaviour
                     break;
                 }
             }
+        }
+        if (ConnectedWeaponJoint != null)
+        {
+            if (ConnectedWeaponJoint.transform.parent.gameObject == RemovedJoint) ConnectedWeaponJoint = null;
         }
     }
 }
