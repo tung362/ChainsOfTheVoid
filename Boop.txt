@@ -1,0 +1,4 @@
+Todo:
+Schematic
+Make UI
+Make IsBuilding variable and make stuff invisible if false
