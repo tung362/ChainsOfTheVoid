@@ -7,7 +7,6 @@ public class Selection : MonoBehaviour
     /*Settings*/
     public float SnapDistance = 2;
 
-
     [HideInInspector]
     public GameObject SelectedObject;
 
@@ -44,10 +43,11 @@ public class Selection : MonoBehaviour
 
         foreach (RaycastHit hit in mouseHits)
         {
-            if (hit.transform.tag == "Block")
+            if (hit.collider.transform.tag == "Block")
             {
-                SelectedObject = hit.transform.gameObject;
-                hit.transform.GetComponent<BlockInteraction>().IsInteracting = true;
+                SelectedObject = hit.collider.transform.gameObject;
+                hit.collider.transform.GetComponent<BlockInteraction>().Detatch();
+                hit.collider.transform.GetComponent<BlockInteraction>().IsInteracting = true;
                 break;
             }
         }
@@ -60,6 +60,9 @@ public class Selection : MonoBehaviour
             SelectedObject.transform.GetComponent<BlockInteraction>().Interaction();
             if(SelectedObject.transform.GetComponent<Rigidbody>() != null) SelectedObject.transform.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
             SelectedObject.transform.GetComponent<BlockInteraction>().AssignJoints(SnapDistance);
+
+            if (Input.GetKey(KeyCode.Q)) SelectedObject.transform.Rotate(new Vector3(0, 0, 1));
+            if (Input.GetKey(KeyCode.E)) SelectedObject.transform.Rotate(new Vector3(0, 0, -1));
         }
     }
 

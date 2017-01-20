@@ -5,6 +5,11 @@ using UnityEngine;
 public class BlockInteraction : MonoBehaviour
 {
     /*Data*/
+    public List<GameObject> ChildJoints = new List<GameObject>();
+    public List<GameObject> ConnectedJoints = new List<GameObject>();
+    public GameObject WeaponJoint;
+    public GameObject ConnectedJoint;
+    public bool IsCommandBlock = false;
     public bool IsInteracting = false;
     //1 = hull, 2 = weapon
     public int SnapType = 1;
@@ -14,18 +19,29 @@ public class BlockInteraction : MonoBehaviour
     private GameObject PreviousClosestJoint;
     private GameObject PreviousClosestBlockJoint;
 
-    void Start ()
+    void Start()
     {
-		
-	}
-	
-	void Update ()
-    {
+        for(int i = 0; i < ChildJoints.Count; ++i) ConnectedJoints.Add(null);
+    }
 
+    void Update()
+    {
+        for (int i = 0; i < ConnectedJoints.Count; ++i)
+        {
+            if(ConnectedJoints[i] != null)
+            {
+                if (ChildJoints[i].GetComponent<Joint>().IsUsed == false) ChildJoints[i].GetComponent<Joint>().IsUsed = true;
+            }
+            else
+            {
+                if (ChildJoints[i].GetComponent<Joint>().IsUsed == true) ChildJoints[i].GetComponent<Joint>().IsUsed = false;
+            }
+        }
     }
 
     public void Interaction()
     {
+        if (IsCommandBlock) return;
         if (!IsInteracting) return;
 
         /*Object follow mouse*/
@@ -42,8 +58,28 @@ public class BlockInteraction : MonoBehaviour
         }
     }
 
+    public void Detatch()
+    {
+        if (IsCommandBlock) return;
+        IsAttached = false;
+        for (int i = 0; i < ConnectedJoints.Count; ++i) ConnectedJoints[i] = null;
+        foreach(Transform child in transform.root)
+        {
+            if(child.GetComponent<BlockInteraction>() != null) child.GetComponent<BlockInteraction>().RemoteRemoveConnectedJoint(gameObject);
+        }
+        transform.root.GetComponent<BlockInteraction>().RemoteRemoveConnectedJoint(gameObject);
+        transform.parent = null;
+        transform.GetComponent<Rigidbody>().isKinematic = false;
+        //gameObject.AddComponent<Rigidbody>();
+        //theRigidbody.mass = 2;
+        //theRigidbody.drag = 1;
+        //theRigidbody.angularDrag = 4;
+        //theRigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
+    }
+
     public void AssignJoints(float SnapDistance)
     {
+        if (IsCommandBlock) return;
         /*Finding Closest joint of both blocks*/
         if (SnapType == 1)
         {
@@ -54,7 +90,7 @@ public class BlockInteraction : MonoBehaviour
             for (int i = 0; i < blocks.Length; ++i)
             {
                 float distance = Vector3.Distance(transform.position, blocks[i].transform.position);
-                if(distance < ClosestblockDistance && blocks[i] != gameObject && blocks[i].GetComponent<BlockInteraction>().SnapType == 1)
+                if(distance < ClosestblockDistance && blocks[i] != gameObject && blocks[i].GetComponent<BlockInteraction>().SnapType == 1 && blocks[i].GetComponent<BlockInteraction>().IsAttached == true)
                 {
                     ClosestblockDistance = distance;
                     closestBlock = blocks[i];
@@ -72,7 +108,7 @@ public class BlockInteraction : MonoBehaviour
                     foreach (Transform joint in transform)
                     {
                         float distance = Vector3.Distance(joint.transform.position, BlockJoint.transform.position);
-                        if(distance < ClosestJointDistance && joint.tag == "BuildJoint" && BlockJoint.tag == "BuildJoint")
+                        if(distance < ClosestJointDistance && joint.tag == "BuildJoint" && BlockJoint.tag == "BuildJoint" && joint.GetComponent<Joint>().IsUsed == false && BlockJoint.GetComponent<Joint>().IsUsed == false)
                         {
                             ClosestJointDistance = distance;
                             ClosestJoint = joint.gameObject;
@@ -125,7 +161,7 @@ public class BlockInteraction : MonoBehaviour
             for (int i = 0; i < blocks.Length; ++i)
             {
                 float distance = Vector3.Distance(transform.position, blocks[i].transform.position);
-                if (distance < ClosestblockDistance && blocks[i] != gameObject && blocks[i].GetComponent<BlockInteraction>().SnapType != 2)
+                if (distance < ClosestblockDistance && blocks[i] != gameObject && blocks[i].GetComponent<BlockInteraction>().SnapType != 2 && blocks[i].GetComponent<BlockInteraction>().IsAttached == true)
                 {
                     ClosestblockDistance = distance;
                     closestBlock = blocks[i];
@@ -143,7 +179,7 @@ public class BlockInteraction : MonoBehaviour
                     foreach (Transform joint in transform)
                     {
                         float distance = Vector3.Distance(joint.transform.position, BlockJoint.transform.position);
-                        if (distance < ClosestJointDistance && joint.tag == "WeaponJoint" && BlockJoint.tag == "WeaponJoint")
+                        if (distance < ClosestJointDistance && joint.tag == "WeaponJoint" && BlockJoint.tag == "WeaponJoint" && joint.GetComponent<Joint>().IsUsed == false && BlockJoint.GetComponent<Joint>().IsUsed == false)
                         {
                             ClosestJointDistance = distance;
                             ClosestJoint = joint.gameObject;
@@ -191,24 +227,49 @@ public class BlockInteraction : MonoBehaviour
 
     public void Snap(float SnapDistance)
     {
+        //Gets rid of physics
+        transform.GetComponent<Rigidbody>().isKinematic = true;
+
+        if (IsCommandBlock) return;
         /*Snapping blocks together depending on the type*/
         if (ClosestJoint == null || ClosestBlockJoint == null) return;
         if (Vector3.Distance(ClosestJoint.transform.position, ClosestBlockJoint.transform.position) > SnapDistance) return;
 
-        Vector3 BlockJointDirection = (ClosestBlockJoint.transform.position - ClosestBlockJoint.transform.root.transform.position).normalized;
-        transform.position = new Vector3(ClosestBlockJoint.transform.position.x + (BlockJointDirection.x * 0.54f), ClosestBlockJoint.transform.position.y + (BlockJointDirection.y * 0.54f), ClosestBlockJoint.transform.position.z);
+        if (SnapType == 1)
+        {
+            //Rotation
+            Vector3 other = (new Vector3(ClosestBlockJoint.transform.parent.position.x, ClosestBlockJoint.transform.parent.position.y, 0) - new Vector3(ClosestBlockJoint.transform.position.x, ClosestBlockJoint.transform.position.y, 0)).normalized;
+            Vector3 current = (new Vector3(ClosestJoint.transform.position.x, ClosestJoint.transform.position.y, 0) - new Vector3(transform.position.x, transform.position.y, 0)).normalized;
+            float angle = Vector3.Angle(-other, -current);
+            Vector3 cross = Vector3.Cross(-other, -current);
+            if (cross.z > 0) angle = -angle;
+            transform.eulerAngles += new Vector3(0, 0, angle);
 
-        Vector3 JointDirection = (new Vector3(ClosestJoint.transform.position.x, ClosestJoint.transform.position.y, 0) - new Vector3(transform.position.x, transform.position.y, 0)).normalized;
+            //Position
+            float Offset = Vector3.Distance(ClosestJoint.transform.position, transform.position);
+            Vector3 BlockJointDirection = (new Vector3(ClosestBlockJoint.transform.position.x, ClosestBlockJoint.transform.position.y, 0) - new Vector3(ClosestBlockJoint.transform.parent.position.x, ClosestBlockJoint.transform.parent.position.y, 0)).normalized;
+            transform.position = new Vector3(ClosestBlockJoint.transform.position.x + (BlockJointDirection.x * Offset), ClosestBlockJoint.transform.position.y + (BlockJointDirection.y * Offset), ClosestBlockJoint.transform.position.z);
+        }
+        else if (SnapType == 2)
+        {
+            //Position
+            transform.position = new Vector3(ClosestBlockJoint.transform.position.x, ClosestBlockJoint.transform.position.y, transform.position.z);
 
-        float angle = Vector3.Angle(-BlockJointDirection, JointDirection);
-        Debug.Log(angle);
-        transform.eulerAngles += new Vector3(0, 0, angle);
+            //Rotation
+            transform.eulerAngles = new Vector3(0, 0, 0);
+        }
 
-        //Quaternion Augoo = Quaternion.LookRotation(Vector3.forward, );
-        //transform.rotation = Augoo;
-
-        if (ClosestJoint.transform.root.GetComponent<Rigidbody>() != null) Destroy(ClosestJoint.transform.root.GetComponent<Rigidbody>());
-        if (ClosestBlockJoint.transform.root.GetComponent<Rigidbody>() != null) Destroy(ClosestBlockJoint.transform.root.GetComponent<Rigidbody>());
+        transform.parent = ClosestBlockJoint.transform.root;
+        IsAttached = true;
+        for (int i = 0; i < ChildJoints.Count; ++i)
+        {
+            if(ChildJoints[i] == ClosestJoint)
+            {
+                ConnectedJoints[i] = ClosestBlockJoint;
+                ClosestBlockJoint.transform.root.GetComponent<BlockInteraction>().RemoteAddConnectedJoint(ClosestJoint, ClosestBlockJoint);
+                break;
+            }
+        }
     }
 
     public void ResetColor()
@@ -223,6 +284,34 @@ public class BlockInteraction : MonoBehaviour
         {
             if (ClosestBlockJoint.tag == "BuildJoint") ClosestBlockJoint.GetComponent<Renderer>().material.color = Color.green;
             else if (ClosestBlockJoint.tag == "WeaponJoint") ClosestBlockJoint.GetComponent<Renderer>().material.color = Color.red;
+        }
+    }
+
+    //Call Whenever connecting with another joint (ensures sync)
+    public void RemoteAddConnectedJoint(GameObject newConnectedJoint, GameObject Joint)
+    {
+        for (int i = 0; i < ChildJoints.Count; ++i)
+        {
+            if (ChildJoints[i] == Joint)
+            {
+                ConnectedJoints[i] = newConnectedJoint;
+                break;
+            }
+        }
+    }
+
+    public void RemoteRemoveConnectedJoint(GameObject RemovedJoint)
+    {
+        for (int i = 0; i < ConnectedJoints.Count; ++i)
+        {
+            if(ConnectedJoints[i] != null)
+            {
+                if (ConnectedJoints[i].transform.parent.gameObject == RemovedJoint)
+                {
+                    ConnectedJoints[i] = null;
+                    break;
+                }
+            }
         }
     }
 }
